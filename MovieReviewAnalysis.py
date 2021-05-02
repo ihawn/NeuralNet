@@ -8,6 +8,7 @@ data = keras.datasets.imdb
 
 (train_data, train_labels), (test_data, test_labels) = data.load_data(num_words=10000)
 
+
 #####################
 #create word mappings
 word_index = data.get_word_index()
@@ -38,7 +39,6 @@ def decode_review(text):
 #####################
 
 
-
 #####################
 #model
 model = keras.Sequential()
@@ -66,7 +66,7 @@ results = model.evaluate(test_data, test_labels)
 
 #####################
 #Validate results
-test_review = test_data[10]
+test_review = test_data[100]
 predict = model.predict([test_review])
 print("Review: ")
 print(decode_review(test_review))
@@ -79,12 +79,12 @@ print(results)
 
 #####################
 #Save model
-model.save("MovieReviewModel.h5")
+#model.save("MovieReviewModel.h5")
 #####################
 
 
 
 #####################
 #Load model
-model = keras.models.load_model("MovieReviewModel.h5")
+#model = keras.models.load_model("MovieReviewModel.h5")
 #####################
