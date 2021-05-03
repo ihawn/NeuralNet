@@ -17,7 +17,7 @@ model.add(keras.layers.Dense(20, activation='relu'))
 model.add(keras.layers.Dense(10, activation='relu'))
 model.add(keras.layers.Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(data['X'], data['Y'], epochs=5, batch_size=50)
+model.fit(data['X'], data['Y'], epochs=25, batch_size=256)
 
 #test the model
 results = model.evaluate(testData['X'])
@@ -33,6 +33,7 @@ x1 = np.arange(-20.0, 20.0, 0.1)
 plt.plot(x1, f(x1))
 plt.plot(testData['X'], predictions, "o", markersize=3)
 plt.show()
+
 
 
 

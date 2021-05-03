@@ -3,7 +3,7 @@ import pandas as pd
 import math
 
 data_size_test = 1000
-data_size = 100000
+data_size = 200000
 
 coord = []
 coord_test = []
