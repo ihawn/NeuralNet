@@ -66,7 +66,7 @@ results = model.evaluate(test_data, test_labels)
 
 #####################
 #Validate results
-test_review = test_data[100]
+test_review = test_data[101]
 predict = model.predict([test_review])
 print("Review: ")
 print(decode_review(test_review))
