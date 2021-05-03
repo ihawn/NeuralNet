@@ -9,12 +9,13 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Dropout
 import matplotlib.dates as mdates
 
-test_date_pivot = '2020-01-01'
-prediction_window = 60
+test_date_pivot = '2021-03-20'
+stock = 'DOGE.csv'
+prediction_window = 30
 
 ###########
 #Parse data
-data = pd.read_csv('GOOG.csv', date_parser=True) #read file
+data = pd.read_csv(stock , date_parser=True) #read file
 data_training = data[data['Date'] < test_date_pivot].copy() #take all entries before 2020-01-01 as train data
 data_test = data[data['Date'] >= test_date_pivot].copy() #take all entries from 2020 on as test data
 data_training = data_training.drop(['Date', 'Adj Close'], axis=1) #drop Date and Adj Close columns from training
@@ -59,7 +60,7 @@ model.add(Dense(units=1))
 ###########
 #Train model
 model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(x_train, y_train, epochs=20, batch_size=1024)
+model.fit(x_train, y_train, epochs=25, batch_size=1024)
 ###########
 
 
@@ -84,6 +85,8 @@ x_test, y_test = np.array(x_test), np.array(y_test)
 
 y_pred = model.predict(x_test) #actual predict
 
+print(y_pred)
+
 scale = 1/scaler.scale_[0] #scale test data back to original scale
 y_pred *= scale
 y_test *= scale
@@ -92,17 +95,12 @@ y_test *= scale
 test_dates = data[data['Date'] >= test_date_pivot]['Date'].copy() #store dates for plot labeling
 
 
-
-
-fig, ax = plt.subplots(figsize=(14, 5))
-ax.plot(test_dates, y_test, color='red', label='Real Google Stock Price')
-ax.plot(y_pred, color='blue', label='Predicted Google Stock Price')
-fmt_half_year = mdates.DayLocator(interval=6)
-ax.xaxis.set_major_locator(fmt_half_year)
-fmt_month = mdates.MonthLocator()
-ax.xaxis.set_minor_locator(fmt_month)
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d-%Y'))
-#ax.format_ydata = lambda x: f'${x:.2f}'  # Format the price.
-ax.grid(True)
-fig.autofmt_xdate()
+# Visualising the results
+plt.figure(figsize=(14,5))
+plt.plot(y_test, color = 'red', label = 'Real Stock Price')
+plt.plot(y_pred, color = 'blue', label = 'Predicted Stock Price')
+plt.title('Google Stock Price Prediction')
+plt.xlabel('Time')
+plt.ylabel('Stock Price')
+plt.legend()
 plt.show()
