@@ -5,7 +5,7 @@ from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.constraints import maxnorm
 
 
-def Init_Train_Test(outputFile, x_train, y_train, x_test, y_test, seed, class_num, epochs):
+def Init_Train_Test(outputFile, activation, x_train, y_train, x_test, y_test, seed, class_num, epochs):
     # model
     model = Sequential()
 
@@ -50,7 +50,7 @@ def Init_Train_Test(outputFile, x_train, y_train, x_test, y_test, seed, class_nu
     model.add(BatchNormalization())
 
     model.add(Dense(class_num))
-    model.add(Activation('softmax'))
+    model.add(Activation(activation))
 
     # train
     optimizer = 'adam'

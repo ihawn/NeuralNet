@@ -12,8 +12,9 @@ img_width = 200
 split = 0.8
 
 #define catagories
-sex_c = ['Male', 'Female']
+sex_c = ['male', 'female']
 race_c = ['White', 'Black', 'Asian', 'Indian', 'Other']
+age_c = np.array(range(1, 111))
 
 #Parse
 img_data = Parse()
@@ -28,13 +29,17 @@ x_test = final_data[1]
 
 model_sex = keras.models.load_model("MaleOrFemale.h5")
 model_race = keras.models.load_model("Race.h5")
+model_age = keras.models.load_model("Age.h5")
 
 #predict
 prediction_sex = model_sex.predict(x_test)
 prediction_race = model_race.predict(x_test)
+prediction_age = model_age.predict(x_test)
 
 for i in range(20,40):
     plt.grid(False)
     plt.imshow(x_test[i], cmap=plt.cm.binary)
-    plt.title("Predicted Sex: " + sex_c[np.argmax(prediction_sex[i])] + "\nPredicted Race: " + race_c[np.argmax(prediction_race[i])])
+    plt.title("Predicted Sex: " + sex_c[np.argmax(prediction_sex[i])] +
+              "\nPredicted Race: " + race_c[np.argmax(prediction_race[i])] +
+              "\nPredicted Age: " + age_c[np.argmax(prediction_race[i])])
     plt.show()
