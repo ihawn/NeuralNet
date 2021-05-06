@@ -40,8 +40,8 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     batch_size=batch_size)
 
 #define catagories
-sex = ['male', 'female']
-race = ['White', 'Black', 'Asian', 'Indian', 'Other']
+sex_c = ['male', 'female']
+race_cat = ['White', 'Black', 'Asian', 'Indian', 'Other']
 
 #parse data from the filenames
 age = []
@@ -76,6 +76,7 @@ y_train = np.array(y_train)
 x_test = np.array(x_test)
 y_test = np.array(y_test)
 
+
 #scale matrix data
 x_train = x_train.astype('float32')
 x_test = x_test.astype('float32')
@@ -91,30 +92,37 @@ class_num = y_test.shape[1]
 #model
 model = Sequential()
 
-model.add(Conv2D(32, (3, 3), input_shape=(3, 32, 32), activation='relu', padding='same'))
+model.add(Conv2D(32, (3, 3), input_shape=x_train.shape[1:], activation='relu', padding='same'))
 model.add(Dropout(0.2))
-
 model.add(BatchNormalization())
 
-model.add(Conv2D(64, (3, 3), padding='same')) #increase convolution filter size so the model can recognize more complex patterns
-model.add(Activation('relu'))
+model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.2))
 model.add(BatchNormalization())
 
-model.add(Conv2D(64, (3, 3), padding='same'))
-model.add(Activation('relu'))
+model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.2))
 model.add(BatchNormalization())
 
-model.add(Conv2D(128, (3, 3), padding='same'))
-model.add(Activation('relu'))
+model.add(Conv2D(128, (3, 3), padding='same', activation='relu'))
 model.add(Dropout(0.2))
 model.add(BatchNormalization())
+
+model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.2))
+model.add(BatchNormalization())
+
+model.add(Conv2D(128, (3, 3), padding='same', activation='relu'))
+model.add(Dropout(0.2))
+model.add(BatchNormalization())
+
 
 model.add(Flatten())
 model.add(Dropout(0.2))
+
 
 model.add(Dense(256, kernel_constraint=maxnorm(3)))
 model.add(Activation('relu'))
@@ -130,7 +138,7 @@ model.add(Dense(class_num))
 model.add(Activation('softmax'))
 
 #train
-epochs = 30
+epochs = 25
 optimizer = 'adam'
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 np.random.seed(seed)
@@ -140,8 +148,19 @@ model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=epochs, bat
 scores = model.evaluate(x_test, y_test, verbose=0)
 print("Accuracy: %.2f%%" % (scores[1]*100))
 
+#save model
+model.save("MaleOrFemale.h5")
 
-#plt.grid(False)
-#plt.imshow(face_matrices[300], cmap=plt.cm.binary)
-#plt.show()
+#predict
+prediction = model.predict(x_test)
+
+for i in range(20):
+    plt.grid(False)
+    plt.imshow(x_test[i], cmap=plt.cm.binary)
+    plt.title("Predicted Sex: " + sex_c[np.argmax(prediction[i])])
+    plt.show()
+
+
+
+
 
