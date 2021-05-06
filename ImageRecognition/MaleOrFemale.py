@@ -138,7 +138,7 @@ model.add(Dense(class_num))
 model.add(Activation('softmax'))
 
 #train
-epochs = 25
+epochs = 20
 optimizer = 'adam'
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 np.random.seed(seed)
@@ -150,15 +150,6 @@ print("Accuracy: %.2f%%" % (scores[1]*100))
 
 #save model
 model.save("MaleOrFemale.h5")
-
-#predict
-prediction = model.predict(x_test)
-
-for i in range(20):
-    plt.grid(False)
-    plt.imshow(x_test[i], cmap=plt.cm.binary)
-    plt.title("Predicted Sex: " + sex_c[np.argmax(prediction[i])])
-    plt.show()
 
 
 
