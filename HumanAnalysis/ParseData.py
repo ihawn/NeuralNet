@@ -36,10 +36,10 @@ def Parse():
 
 
 
-def Prep_Data(input, face_matrices, split):
+def Prep_Data(input, face_matrices, split, seed):
     # randomize the input and output arrays
     temp = list(zip(face_matrices, input))
-    random.shuffle(temp)
+    random.Random(seed).shuffle(temp) #ensure age, sex, and race are all shuffled into the same order
     face_matrices, input = zip(*temp)
 
     # define x and y data and split it into train and test
