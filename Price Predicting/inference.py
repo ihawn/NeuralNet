@@ -9,40 +9,6 @@ from datetime import datetime, timedelta
 import yfinance as yf
 import os
 
-def Model():
-    #Model
-    model = Sequential()
-
-    model.add(LSTM(units=60, activation='tanh', return_sequences=True, input_shape=(train_x.shape[1], 5)))
-    model.add(Dropout(0.2))
-
-    model.add(LSTM(units=60, activation='tanh', return_sequences=True))
-    model.add(Dropout(0.2))
-
-    model.add(LSTM(units=80, activation='tanh', return_sequences=True))
-    model.add(Dropout(0.2))
-
-    model.add(LSTM(units=120, activation='tanh'))
-    model.add(Dropout(0.2))
-
-    model.add(Dense(units=1))
-
-    model.compile(optimizer='adam', loss='mean_squared_error')
-    model.fit(train_x, train_y, epochs=epochs, batch_size=bat_size)
-
-    pred_y = model.predict(test_x)
-
-
-    scale = 1/scaler.scale_[0]
-    pred_y *= scale
-
-    difs.append(-(df_y['Close'].iloc[-1] - pred_y) / df_y['Close'].iloc[-1])
-
-    # Store price
-    data = {'Date': [datetime.today()], infer_: difs}
-    df = pd.DataFrame(data)
-    df.to_csv('price_changes.csv', mode='a', header=False)
-
 
 
 #Parameters
@@ -53,7 +19,7 @@ adj_start = datetime.strptime(start, '%Y-%m-%d') - timedelta(future_days)
 today = datetime.now().strftime('%Y-%m-%d')
 bat_size = 64
 chunk_size = 60
-epochs = 1
+epochs = 75
 infer_ = [
     'ETH-USD', 'BNB-USD', 'DOGE-USD', 'XRP-USD', 'ADA-USD', 'BCH-USD', 'LTC-USD', 'LINK-USD',
     'XLM-USD', 'THETA-USD', 'TRX-USD', 'EOS-USD', 'XMR-USD', 'NEO-USD'
@@ -112,9 +78,45 @@ for k in range(len(infer_)):
     train_x, train_y = np.array(train_x), np.array(train_y)
     test_x = np.array(test_x)
 
+    # Model
+    model = Sequential()
 
-    Model()
+    model.add(LSTM(units=60, activation='tanh', return_sequences=True, input_shape=(train_x.shape[1], 5)))
+    model.add(Dropout(0.2))
+
+    model.add(LSTM(units=60, activation='tanh', return_sequences=True))
+    model.add(Dropout(0.2))
+
+    model.add(LSTM(units=80, activation='tanh', return_sequences=True))
+    model.add(Dropout(0.2))
+
+    model.add(LSTM(units=120, activation='tanh'))
+    model.add(Dropout(0.2))
+
+    model.add(Dense(units=1))
+
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.fit(train_x, train_y, epochs=epochs, batch_size=bat_size)
+
+    pred_y = model.predict(test_x)
+
+    scale = 1 / scaler.scale_[0]
+    pred_y *= scale
+
+    difs.append(-(df_y['Close'].iloc[-1] - pred_y) / df_y['Close'].iloc[-1])
 
 
-for i in range(len(infer)):
-    print(infer[i], ": ", difs[i])
+
+
+
+
+arr = np.array(difs).reshape(len(difs))
+m = np.mean(arr)
+arr = np.add(arr, -m)
+
+data = {'Date': str(datetime.now().date()), 'Crypto': infer_, 'Adj Diff': arr}
+df = pd.DataFrame(data)
+df.to_csv('price_changes.csv', mode='a', header=False)
+
+for i in range(len(infer_)):
+    print(infer_[i], ": ", arr[i])

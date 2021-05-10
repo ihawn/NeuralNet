@@ -57,7 +57,7 @@ x_train = train_data[10000:]
 y_val = train_labels[:10000]
 y_train = train_labels[10000:]
 
-fitModel = model.fit(x_train, y_train, epochs=8, batch_size=512, validation_data=(x_val, y_val), verbose=1)
+fitModel = model.fit(x_train, y_train, epochs=25, batch_size=512, validation_data=(x_val, y_val), verbose=1)
 
 results = model.evaluate(test_data, test_labels)
 #####################
@@ -66,7 +66,7 @@ results = model.evaluate(test_data, test_labels)
 
 #####################
 #Validate results
-test_review = test_data[11]
+test_review = test_data[10457]
 predict = model.predict([test_review])
 print("Review: ")
 print(decode_review(test_review))
