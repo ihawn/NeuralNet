@@ -12,9 +12,9 @@ testData = pd.read_csv('FunctionTestData.csv')
 
 #model
 model = keras.Sequential()
-model.add(keras.layers.Dense(40, input_dim=1, activation='relu'))
-model.add(keras.layers.Dense(20, activation='relu'))
-model.add(keras.layers.Dense(10, activation='relu'))
+model.add(keras.layers.Dense(40, input_dim=1, activation='tanh'))
+model.add(keras.layers.Dense(20, activation='tanh'))
+model.add(keras.layers.Dense(10, activation='tanh'))
 model.add(keras.layers.Dense(1))
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(data['X'], data['Y'], epochs=25, batch_size=256)
