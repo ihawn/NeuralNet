@@ -2,7 +2,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.optimizers import RMSprop
 import tensorflow as tf
 
-train_dir = 'C:\Users\Isaac\Documents\Datasets\Generated\horse-or-human\train'
+train_dir = 'C:/Users/Isaac/Documents/Datasets/Generated/horse-or-human/train'
 train_datagen = ImageDataGenerator(rescale=1./255)
 validation_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -38,7 +38,7 @@ model = tf.keras.models.Sequential([
 
 model.compile(loss='binary_crossentropy',
               optimizer=RMSprop(lr=0.001),
-              metrics=['acc]'])
+              metrics=['acc'])
 
 
 history = model.fit_generator(
