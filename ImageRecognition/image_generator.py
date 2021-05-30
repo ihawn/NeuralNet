@@ -3,6 +3,7 @@ from tensorflow.keras.optimizers import RMSprop
 import tensorflow as tf
 
 train_dir = 'C:/Users/Isaac/Documents/Datasets/Generated/horse-or-human/train'
+valid_dir = 'C:/Users/Isaac/Documents/Datasets/Generated/horse-or-human/validation'
 train_datagen = ImageDataGenerator(rescale=1./255)
 validation_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -12,9 +13,9 @@ train_generator = train_datagen.flow_from_directory(train_dir,
                                                     class_mode='binary')
 
 
-validation_generator = validation_datagen.flow_from_directory(train_dir,
+validation_generator = validation_datagen.flow_from_directory(valid_dir,
                                                     target_size=(300, 300),
-                                                    batch_size=128,
+                                                    batch_size=32,
                                                     class_mode='binary')
 
 
@@ -44,8 +45,11 @@ model.compile(loss='binary_crossentropy',
 history = model.fit_generator(
     train_generator,
     steps_per_epoch=8,
-    epochs=15,
+    epochs=30,
     validation_data=validation_generator,
     validation_steps=8,
     verbose=2
 )
+
+
+model.save("HorseOrHuman.h5")

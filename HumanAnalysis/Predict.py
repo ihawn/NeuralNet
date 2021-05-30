@@ -41,7 +41,7 @@ prediction_sex = model_sex.predict(x_test)
 prediction_race = model_race.predict(x_test)
 prediction_age = model_age.predict(x_test)
 
-for i in range(0, 20):
+for i in range(0, 10):
     plt.grid(False)
     plt.imshow(x_test[i], cmap=plt.cm.binary)
     plt.title("Prediction: " + str(age_c[np.argmax(prediction_age[i])]) + " year old "
